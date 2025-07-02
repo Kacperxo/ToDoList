@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace ToDoList.ViewModels
 {
-    internal class NavigationVM
+    public class NavigationVM : BaseViewModel
     {
+        private readonly MainWindowVM _root;
+
+        public NavigationVM(MainWindowVM root)
+        {
+            _root = root;
+        }   
     }
 }
