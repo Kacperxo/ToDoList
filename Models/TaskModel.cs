@@ -1,6 +1,6 @@
 ﻿namespace ToDoList.Models
 {
-    internal class TaskModel
+    public class TaskModel
     {
         #region variables
         public int Id { get; set; }
