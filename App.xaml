@@ -1,9 +1,26 @@
 ﻿<Application x:Class="ToDoList.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:ToDoList">
-             <!-- StartupUri="MainWindow.xaml" -->
+             xmlns:local="clr-namespace:ToDoList"
+             xmlns:vm="clr-namespace:ToDoList.ViewModels"
+             xmlns:views="clr-namespace:ToDoList.Views">
+    <!-- StartupUri="MainWindow.xaml" -->
     <Application.Resources>
-         
+
+        <!-- Lista zadań -->
+        <DataTemplate DataType="{x:Type vm:TaskVM}">
+            <views:TaskView/>
+        </DataTemplate>
+
+        <!-- Formularz dodawania -->
+        <DataTemplate DataType="{x:Type vm:AddTaskVM}">
+            <views:AddTaskView/>
+        </DataTemplate>
+
+        <!-- Formularz edycji -->
+        <DataTemplate DataType="{x:Type vm:EditTaskVM}">
+            <views:EditTaskView/>
+        </DataTemplate> 
+        
     </Application.Resources>
 </Application>

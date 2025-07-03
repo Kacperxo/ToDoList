@@ -18,7 +18,7 @@ namespace ToDoList.Views
     /// <summary>
     /// Interaction logic for EditTaskView.xaml
     /// </summary>
-    public partial class EditTaskView : Page
+    public partial class EditTaskView : UserControl
     {
         public EditTaskView()
         {

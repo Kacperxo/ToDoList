@@ -4,9 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ToDoList"
+        xmlns:vm="clr-namespace:ToDoList.ViewModels"
+        xmlns:views="clr-namespace:ToDoList.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="ToDoList" Height="400" Width="800">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
 
+        <views:NavigationView Grid.Column="0" DataContext="{Binding Navigation}"/>
+
+        <ContentControl Grid.Column="1" Content="{Binding CurrentPage}" />
     </Grid>
 </Window>

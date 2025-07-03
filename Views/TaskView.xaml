@@ -1,14 +1,94 @@
-﻿<Page x:Class="ToDoList.Views.TaskView"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:ToDoList.Views"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="TaskView">
+﻿<UserControl x:Class="ToDoList.Views.TaskView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ToDoList.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="600">
+    <!-- ========== 1. Zasoby widoku ========== -->
+    <UserControl.Resources>
 
-    <Grid>
-        
+        <!-- Border zależny od IsCompleted -->
+        <Style x:Key="TaskBorderStyle" TargetType="Border">
+            <Setter Property="Background"     Value="#FFF6F6F6"/>
+            <Setter Property="CornerRadius"   Value="4"/>
+            <Setter Property="Padding"        Value="6"/>
+            <Setter Property="Margin"         Value="2"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsCompleted}" Value="True">
+                    <Setter Property="Opacity" Value="0.5"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Szablon jednego wiersza -->
+        <DataTemplate x:Key="TaskItemTemplate">
+            <Border Style="{StaticResource TaskBorderStyle}">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding DueDate,
+                                      StringFormat='{}{0:HH\\:mm}'}"
+                               Width="48"/>
+
+                    <CheckBox IsChecked="{Binding IsCompleted}"
+                              Margin="0,0,8,0"/>
+
+                    <TextBlock Text="{Binding Title}"
+                               FontWeight="SemiBold"/>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+
+        <!-- Styl komunikatu „brak zadań” -->
+        <Style x:Key="NoTaskStyle" TargetType="TextBlock">
+            <Setter Property="FontSize"            Value="16"/>
+            <Setter Property="FontStyle"           Value="Italic"/>
+            <Setter Property="Foreground"          Value="Gray"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment"   Value="Center"/>
+        </Style>
+
+    </UserControl.Resources>
+
+    <!-- ========== 2. Główna siatka ========== -->
+    <Grid Margin="12">
+
+        <!-- Lista zadań -->
+        <ListView ItemsSource="{Binding Tasks}"
+                  ItemTemplate="{StaticResource TaskItemTemplate}"
+                  BorderThickness="0">
+            <ListView.Style>
+                <Style TargetType="ListView">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Tasks.Count}" Value="0">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.Style>
+        </ListView>
+
+        <!-- Komunikat „Brak zadań” -->
+        <TextBlock Text="{Binding SelectedDate,
+                  StringFormat='Brak zadań na dzień {0:dd.MM.yyyy}'}">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="FontSize"            Value="16"/>
+                    <Setter Property="FontStyle"           Value="Italic"/>
+                    <Setter Property="Foreground"          Value="Gray"/>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="VerticalAlignment"   Value="Center"/>
+                    <Setter Property="Visibility"          Value="Collapsed"/>
+
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Tasks.Count}" Value="0">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
     </Grid>
-</Page>
+</UserControl>

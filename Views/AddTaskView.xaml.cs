@@ -18,7 +18,7 @@ namespace ToDoList.Views
     /// <summary>
     /// Interaction logic for AddTaskView.xaml
     /// </summary>
-    public partial class AddTaskView : Page
+    public partial class AddTaskView : UserControl
     {
         public AddTaskView()
         {

@@ -1,14 +1,54 @@
-﻿<Page x:Class="ToDoList.Views.AddTaskView"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:ToDoList.Views"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="AddTaskView">
-
+﻿<UserControl x:Class="ToDoList.Views.AddTaskView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:local="clr-namespace:ToDoList.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="600">
     <Grid>
-        
+        <StackPanel Margin="10" Orientation="Vertical">
+            
+            <!-- Title -->
+            <TextBlock Text="Tytuł:"/>
+            <TextBox Text="{Binding Title, 
+                Mode=TwoWay, 
+                UpdateSourceTrigger=PropertyChanged}"/>
+
+            <!-- Description -->
+            <TextBlock Text="Opis:"/>
+            <TextBox TextWrapping="Wrap" AcceptsReturn="True"
+                Text="{Binding Description, 
+                Mode=TwoWay, 
+                UpdateSourceTrigger=PropertyChanged}"/>
+            
+            <!-- Due Date -->
+            <TextBlock Text="Data wykonania zadania:"/>
+            <DatePicker SelectedDate="{Binding SelectedDueDate, Mode=TwoWay}"/>
+
+            <!-- Due Time -->
+            <TextBlock Text="Czas wykonania zadania:"/>
+            <xctk:TimePicker Value="{Binding Time, Mode=TwoWay}"
+                             Format="Custom"
+                             FormatString="HH:mm"
+                             TimeInterval="00:05:00"
+                             ShowButtonSpinner="True"
+                             EndTime="23:59"/>
+
+            <!-- ========== Buttons ========== -->
+            <StackPanel Orientation="Horizontal">
+                
+                <!-- Add button -->
+                <Button Content="Dodaj zadanie!"
+                        Command="{Binding AddTaskButton}"
+                        Margin="0,0,5,0"/>
+
+                <!-- Cancel button -->
+                <Button Content="Anuluj"
+                        Command="{Binding CancelAddingTask}"/>
+                
+            </StackPanel>
+        </StackPanel>
     </Grid>
-</Page>
+</UserControl>
