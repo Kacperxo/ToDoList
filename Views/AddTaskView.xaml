@@ -7,6 +7,37 @@
              xmlns:local="clr-namespace:ToDoList.Views"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="600">
+
+    <UserControl.Resources>
+        <!-- Styl, który będzie pokazywał błędy walidacji dla TextBox -->
+        <Style TargetType="TextBox">
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <StackPanel>
+                            <!-- Czerwona ramka wokół kontrolki z błędem -->
+                            <Border BorderBrush="Red" BorderThickness="1">
+                                <AdornedElementPlaceholder x:Name="adorner"/>
+                            </Border>
+                            <!-- Komunikat o błędzie pod kontrolką -->
+                            <TextBlock Text="{Binding AdornedElement.(Validation.Errors)[0].ErrorContent}" 
+                                       Foreground="Red"
+                                       FontSize="10"
+                                       Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <!-- Dodatkowy Trigger, aby ramka była widoczna tylko gdy jest błąd -->
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip" 
+                            Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
     <Grid>
         <StackPanel Margin="10" Orientation="Vertical">
             
@@ -14,14 +45,16 @@
             <TextBlock Text="Tytuł:"/>
             <TextBox Text="{Binding Title, 
                 Mode=TwoWay, 
-                UpdateSourceTrigger=PropertyChanged}"/>
+                UpdateSourceTrigger=PropertyChanged,
+                ValidatesOnNotifyDataErrors=True}"/>
 
             <!-- Description -->
             <TextBlock Text="Opis:"/>
             <TextBox TextWrapping="Wrap" AcceptsReturn="True"
                 Text="{Binding Description, 
                 Mode=TwoWay, 
-                UpdateSourceTrigger=PropertyChanged}"/>
+                UpdateSourceTrigger=PropertyChanged,
+                ValidatesOnNotifyDataErrors=True}"/>
             
             <!-- Due Date -->
             <TextBlock Text="Data wykonania zadania:"/>
@@ -29,7 +62,7 @@
 
             <!-- Due Time -->
             <TextBlock Text="Czas wykonania zadania:"/>
-            <xctk:TimePicker Value="{Binding Time, Mode=TwoWay}"
+            <xctk:TimePicker Value="{Binding SelectedDueTime, Mode=TwoWay}"
                              Format="Custom"
                              FormatString="HH:mm"
                              TimeInterval="00:05:00"
@@ -46,7 +79,7 @@
 
                 <!-- Cancel button -->
                 <Button Content="Anuluj"
-                        Command="{Binding CancelAddingTask}"/>
+                        Command="{Binding CancelAddingTaskButton}"/>
                 
             </StackPanel>
         </StackPanel>

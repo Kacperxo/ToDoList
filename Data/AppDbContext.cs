@@ -20,6 +20,9 @@ namespace ToDoList.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<TaskModel>()
+                .ToTable("Tasks");
+
+            modelBuilder.Entity<TaskModel>()
                 .HasKey(t => t.Id);
 
             modelBuilder.Entity<TaskModel>()

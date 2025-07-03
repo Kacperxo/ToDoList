@@ -15,18 +15,17 @@
             <!-- Add Button -->
             <Button Content="Dodaj"
                     Margin="0,8,0,0"
-                    Command="{Binding AddCmd}" />
+                    Command="{Binding AddButton}" />
 
             <!-- Edit Button -->
             <Button Content="Edytuj"
                     Margin="0,4,0,0"
-                    Command="{Binding EditCmd}" />
+                    Command="{Binding EditButton}" />
             
             <!-- Delete Button -->
             <Button Content="Usuń"
                     Margin="0,4,0,0"
-                    Command="{Binding DeleteCmd}" />
-            
+                    Command="{Binding DeleteButton}"/>
         </StackPanel>
     </Grid>
 </UserControl>

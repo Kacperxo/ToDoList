@@ -28,7 +28,7 @@
 
             <!-- Due Time -->
             <TextBlock Text="Czas wykonania zadania:"/>
-            <xctk:TimePicker Value="{Binding Time, Mode=TwoWay}"
+            <xctk:TimePicker Value="{Binding SelectedDueTime, Mode=TwoWay}"
                              Format="Custom"
                              FormatString="HH:mm"
                              TimeInterval="00:05:00"

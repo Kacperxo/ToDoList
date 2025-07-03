@@ -1,15 +1,36 @@
-﻿namespace ToDoList.Models
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace ToDoList.Models
 {
-    public class TaskModel
+    public class TaskModel : INotifyPropertyChanged
     {
         #region variables
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime DueDate { get; set; }
-        public bool IsCompleted { get; set; }
+        private bool _isCompleted;
+        public bool IsCompleted
+        {
+            get => _isCompleted;
+            set
+            {
+                if (_isCompleted != value)
+                {
+                    _isCompleted = value;
+                    OnProp();
+                }
+            }
+        }
         public DateTime UpdatedAt { get; set; }
         public DateTime CreatedAt { get; set; }
+        #endregion
+
+        #region INotifyPropertyChanged implementation
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnProp([CallerMemberName] string? n = null) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(n));
         #endregion
 
         #region constructors

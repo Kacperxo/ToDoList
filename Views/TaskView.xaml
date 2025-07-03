@@ -54,14 +54,15 @@
     <Grid Margin="12">
 
         <!-- Lista zadań -->
-        <ListView ItemsSource="{Binding Tasks}"
+        <ListView ItemsSource="{Binding TasksView}"
                   ItemTemplate="{StaticResource TaskItemTemplate}"
+                  SelectedItem="{Binding SelectedTask, Mode=TwoWay}"
                   BorderThickness="0">
             <ListView.Style>
                 <Style TargetType="ListView">
                     <Setter Property="Visibility" Value="Visible"/>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Tasks.Count}" Value="0">
+                        <DataTrigger Binding="{Binding TasksView.IsEmpty}" Value="True">
                             <Setter Property="Visibility" Value="Collapsed"/>
                         </DataTrigger>
                     </Style.Triggers>
@@ -71,18 +72,17 @@
 
         <!-- Komunikat „Brak zadań” -->
         <TextBlock Text="{Binding SelectedDate,
-                  StringFormat='Brak zadań na dzień {0:dd.MM.yyyy}'}">
+                  StringFormat='Brak zadań na dzień {0:dd.MM.yyyy}'}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontStyle="Italic"
+                   FontSize="16"
+                   Foreground="Gray">
             <TextBlock.Style>
                 <Style TargetType="TextBlock">
-                    <Setter Property="FontSize"            Value="16"/>
-                    <Setter Property="FontStyle"           Value="Italic"/>
-                    <Setter Property="Foreground"          Value="Gray"/>
-                    <Setter Property="HorizontalAlignment" Value="Center"/>
-                    <Setter Property="VerticalAlignment"   Value="Center"/>
                     <Setter Property="Visibility"          Value="Collapsed"/>
-
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Tasks.Count}" Value="0">
+                        <DataTrigger Binding="{Binding TasksView.IsEmpty}" Value="True">
                             <Setter Property="Visibility" Value="Visible"/>
                         </DataTrigger>
                     </Style.Triggers>

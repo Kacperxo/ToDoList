@@ -27,6 +27,12 @@ namespace ToDoList.Services
         }
 
         /* ----------  R  |  Read  ------------ */
+        public async Task<IEnumerable<TaskModel>> GetByDateAsync(DateTime date)
+        {
+            return await _context.Tasks
+                .Where(t => t.DueDate.Date == date.Date)
+                .ToListAsync();
+        }
         public async Task<List<TaskModel>> GetForDateAsync(DateTime day)
         {
             DateTime start = day.Date;
