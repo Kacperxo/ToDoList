@@ -14,8 +14,10 @@
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
 
-        <views:NavigationView Grid.Column="0" DataContext="{Binding Navigation}"/>
-
+        <Border Grid.Column="0" BorderBrush="LightGray" BorderThickness="0,0,1,0">
+            <views:NavigationView DataContext="{Binding Navigation}"/>
+        </Border>
+        
         <ContentControl Grid.Column="1" Content="{Binding CurrentPage}" />
     </Grid>
 </Window>

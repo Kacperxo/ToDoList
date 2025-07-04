@@ -22,8 +22,8 @@ namespace ToDoList.ViewModels
             {
                 // Sprawdź wszystkie warunki walidacji bez dodawania błędów do UI
                 if (string.IsNullOrWhiteSpace(_Title)) return false;
-                if (_Title.Length > 50) return false;
-                if (Description.Length > 500) return false;
+                if (_Title.Length > 100) return false;
+                if (Description.Length > 1000) return false;
                 return true; 
             }
         }
@@ -73,9 +73,9 @@ namespace ToDoList.ViewModels
             {
                 AddError(nameof(Title), "Tytuł nie może być pusty.");
             }
-            if (_Title.Length > 50)
+            if (_Title.Length > 100)
             {
-                AddError(nameof(Title), "Tytuł nie może mieć więcej niż 50 znaków.");
+                AddError(nameof(Title), "Tytuł nie może mieć więcej niż 100 znaków.");
             }
         }
 
@@ -83,9 +83,9 @@ namespace ToDoList.ViewModels
         private void ValidateDescription()
         {
             ClearErrors(nameof(Description));
-            if (_Description.Length > 500)
+            if (_Description.Length > 1000)
             {
-                AddError(nameof(Description), "Opis nie może mieć więcej niż 500 znaków.");
+                AddError(nameof(Description), "Opis nie może mieć więcej niż 1000 znaków.");
             }
         }
         #endregion

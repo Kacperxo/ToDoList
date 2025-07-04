@@ -7,45 +7,116 @@
              xmlns:local="clr-namespace:ToDoList.Views"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="600">
-    <Grid>
-        <StackPanel Margin="10" Orientation="Vertical">
-            <!-- Title -->
-            <TextBlock Text="Tytuł:"/>
-            <TextBox Text="{Binding Title,
-                            Mode=TwoWay,
-                            UpdateSourceTrigger=PropertyChanged}"/>
 
-            <!-- Description -->
-            <TextBlock Text="Opis:"/>
-            <TextBox TextWrapping="Wrap" AcceptsReturn="True"
-                     Text="{Binding Description,
-                                    Mode=TwoWay,
-                                    UpdateSourceTrigger=PropertyChanged}"/>
+    <UserControl.Resources>
+        <!-- Styl walidacji dla TextBox, skopiowany z AddTaskView -->
+        <Style TargetType="TextBox">
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <StackPanel>
+                            <Border BorderBrush="Red" BorderThickness="1">
+                                <AdornedElementPlaceholder x:Name="adorner"/>
+                            </Border>
+                            <TextBlock Text="{Binding AdornedElement.(Validation.Errors)[0].ErrorContent}" 
+                                       Foreground="Red"
+                                       FontSize="10"
+                                       Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip" 
+                            Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
 
-            <!-- Due Date -->
-            <TextBlock Text="Data wykonania zadania:"/>
-            <DatePicker SelectedDate="{Binding SelectedDueDate, Mode=TwoWay}"/>
+    <Grid Margin="12">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-            <!-- Due Time -->
-            <TextBlock Text="Czas wykonania zadania:"/>
-            <xctk:TimePicker Value="{Binding SelectedDueTime, Mode=TwoWay}"
-                             Format="Custom"
-                             FormatString="HH:mm"
-                             TimeInterval="00:05:00"
-                             ShowButtonSpinner="True"
-                             EndTime="23:59"/>
+        <!-- Lewa kolumna z polami do edycji -->
+        <StackPanel Grid.Column="0" Orientation="Vertical">
+            <!-- Tytuł -->
+            <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Tytuł:"/>
+                <TextBox Grid.Column="1" 
+                         Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
+                         Margin="5,0,0,5"/>
+            </Grid>
 
-            <!-- ========== Buttons ========== -->
-            <StackPanel Orientation="Horizontal">
-                <!-- Save button -->
-                <Button Content="Zapisz zmiany"
+            <!-- Data wykonania -->
+            <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="Data wykonania zadania:"/>
+                <DatePicker Grid.Column="1" HorizontalContentAlignment="Right"
+                            SelectedDate="{Binding SelectedDueDate, Mode=TwoWay}"
+                            Margin="5,0,0,0"/>
+            </Grid>
+
+            <!-- Czas wykonania -->
+            <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="Czas wykonania zadania:"/>
+                <xctk:TimePicker Grid.Column="1" TextAlignment="Center"
+                                 Value="{Binding SelectedDueTime, Mode=TwoWay}"
+                                 Margin="5,0,0,0"
+                                 Format="Custom"
+                                 FormatString="HH:mm"
+                                 TimeInterval="00:05:00"
+                                 ShowButtonSpinner="True"
+                                 EndTime="23:59"/>
+            </Grid>
+
+            <!-- Przyciski -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <!-- Przycisk Zapisz -->
+                <Button Grid.Column="0" 
+                        Content="Zapisz zmiany"
                         Command="{Binding SaveTaskButton}"
                         Margin="0,0,5,0"/>
-
-                <!-- Cancel button -->
-                <Button Content="Anuluj"
+                <!-- Przycisk Anuluj -->
+                <Button Grid.Column="1" 
+                        Content="Anuluj"
                         Command="{Binding CancelSavingTaskButton}"/>
-            </StackPanel>
+            </Grid>
         </StackPanel>
+
+        <!-- Prawa kolumna z opisem -->
+        <Grid Grid.Column="1" Margin="10,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Margin="0,0,0,5" Text="Opis:"/>
+            <Border Grid.Row="1" BorderBrush="LightGray" BorderThickness="1" CornerRadius="4" Padding="5" Background="#FFF6F6F6">
+                <TextBox Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         VerticalScrollBarVisibility="Auto"
+                         BorderThickness="0"
+                         Background="Transparent"/>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>

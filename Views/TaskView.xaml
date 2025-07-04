@@ -26,15 +26,18 @@
         <DataTemplate x:Key="TaskItemTemplate">
             <Border Style="{StaticResource TaskBorderStyle}">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="{Binding DueDate,
-                                      StringFormat='{}{0:HH\\:mm}'}"
-                               Width="48"/>
+                    <TextBlock Text="{Binding DueDate, StringFormat='{}{0:HH\\:mm}'}"
+                               Width="35"
+                               VerticalAlignment="Center"/>
 
                     <CheckBox IsChecked="{Binding IsCompleted}"
-                              Margin="0,0,8,0"/>
+                              Margin="0,0,8,0"
+                              VerticalAlignment="Center"/>
 
                     <TextBlock Text="{Binding Title}"
-                               FontWeight="SemiBold"/>
+                               FontWeight="SemiBold"
+                               Width="195"
+                               TextWrapping="Wrap"/>
                 </StackPanel>
             </Border>
         </DataTemplate>
@@ -52,43 +55,64 @@
 
     <!-- ========== 2. Główna siatka ========== -->
     <Grid Margin="12">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <!-- Lista zadań -->
-        <ListView ItemsSource="{Binding TasksView}"
-                  ItemTemplate="{StaticResource TaskItemTemplate}"
-                  SelectedItem="{Binding SelectedTask, Mode=TwoWay}"
-                  BorderThickness="0">
-            <ListView.Style>
-                <Style TargetType="ListView">
-                    <Setter Property="Visibility" Value="Visible"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding TasksView.IsEmpty}" Value="True">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ListView.Style>
-        </ListView>
+        <Grid Grid.Column="0">
+            <!-- Lista zadań -->
+            <ListView ItemsSource="{Binding TasksView}"
+                      ItemTemplate="{StaticResource TaskItemTemplate}"
+                      SelectedItem="{Binding SelectedTask, Mode=TwoWay}"
+                      BorderThickness="0">
+                <ListView.Style>
+                    <Style TargetType="ListView">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding TasksView.IsEmpty}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.Style>
+            </ListView>
 
-        <!-- Komunikat „Brak zadań” -->
-        <TextBlock Text="{Binding SelectedDate,
-                  StringFormat='Brak zadań na dzień {0:dd.MM.yyyy}'}"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   FontStyle="Italic"
-                   FontSize="16"
-                   Foreground="Gray">
-            <TextBlock.Style>
-                <Style TargetType="TextBlock">
-                    <Setter Property="Visibility"          Value="Collapsed"/>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding TasksView.IsEmpty}" Value="True">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBlock.Style>
-        </TextBlock>
-
+            <!-- Komunikat „Brak zadań” -->
+            <TextBlock Text="{Binding SelectedDate,
+                      StringFormat='Brak zadań na dzień {0:dd.MM.yyyy}'}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontStyle="Italic"
+                       FontSize="16"
+                       Foreground="Gray">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility"          Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding TasksView.IsEmpty}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Grid>
+        <!-- Wyswietlanie opisu zadania -->
+        <Border Grid.Column="1" 
+                BorderBrush="LightGray" 
+                BorderThickness="1" 
+                CornerRadius="4"
+                Margin="12,0,0,0"
+                Padding="5"
+                Background="#FFF6F6F6">
+            <TextBox Text="{Binding SelectedTask.Description}"
+                     TextWrapping="Wrap"
+                     AcceptsReturn="True"
+                     VerticalScrollBarVisibility="Auto"
+                     BorderThickness="0"
+                     Background="Transparent"
+                     IsReadOnly="True"/>
+        </Border>
     </Grid>
 </UserControl>

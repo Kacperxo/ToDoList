@@ -28,11 +28,11 @@ namespace ToDoList.Data
             modelBuilder.Entity<TaskModel>()
                 .Property(t => t.Title)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(100);
 
             modelBuilder.Entity<TaskModel>()
                 .Property(t => t.Description)
-                .HasMaxLength(500);
+                .HasMaxLength(1000);
 
             modelBuilder.Entity<TaskModel>()
                 .Property(t => t.DueDate)

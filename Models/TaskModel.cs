@@ -60,9 +60,9 @@ namespace ToDoList.Models
                 {
                     throw new ArgumentException("Title cannot be empty or whitespace.");
                 }
-                if (newTitle.Length > 50)
+                if (newTitle.Length > 100)
                 {
-                    throw new ArgumentException("Title cannot exceed 50 characters.");
+                    throw new ArgumentException("Title cannot exceed 100 characters.");
                 }
                 Title = newTitle;
                 UpdatedAt = DateTime.Now;
@@ -76,9 +76,9 @@ namespace ToDoList.Models
         {
             try
             {
-                if (newDescription.Length > 500)
+                if (newDescription.Length > 1000)
                 {
-                    throw new ArgumentException("Description cannot exceed 500 characters.");
+                    throw new ArgumentException("Description cannot exceed 1000 characters.");
                 }
                 Description = newDescription;
                 UpdatedAt = DateTime.Now;
@@ -122,13 +122,13 @@ namespace ToDoList.Models
                 {
                     throw new ArgumentException("Title cannot be empty or whitespace.");
                 }
-                if (title.Length > 50)
+                if (title.Length > 100)
                 {
-                    throw new ArgumentException("Title cannot exceed 50 characters.");
+                    throw new ArgumentException("Title cannot exceed 100 characters.");
                 }
-                if (description.Length > 500)
+                if (description.Length > 1000)
                 {
-                    throw new ArgumentException("Description cannot exceed 500 characters.");
+                    throw new ArgumentException("Description cannot exceed 1000 characters.");
                 }
                 if (dueDate < DateTime.Now)
                 {

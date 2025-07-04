@@ -16,12 +16,12 @@
                     <ControlTemplate>
                         <StackPanel>
                             <!-- Czerwona ramka wokół kontrolki z błędem -->
-                            <Border BorderBrush="Red" BorderThickness="1">
+                            <Border BorderBrush="#CA3E47" BorderThickness="1">
                                 <AdornedElementPlaceholder x:Name="adorner"/>
                             </Border>
                             <!-- Komunikat o błędzie pod kontrolką -->
                             <TextBlock Text="{Binding AdornedElement.(Validation.Errors)[0].ErrorContent}" 
-                                       Foreground="Red"
+                                       Foreground="#CA3E47"
                                        FontSize="10"
                                        Margin="0,2,0,0"/>
                         </StackPanel>
@@ -38,50 +38,111 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid>
-        <StackPanel Margin="10" Orientation="Vertical">
+    <Grid Margin="12">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" Orientation="Vertical">
+            
             
             <!-- Title -->
-            <TextBlock Text="Tytuł:"/>
-            <TextBox Text="{Binding Title, 
+            <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" 
+                           Text="Tytuł:"/>
+            <TextBox Grid.Column="1" 
+                     Text="{Binding Title, 
                 Mode=TwoWay, 
                 UpdateSourceTrigger=PropertyChanged,
-                ValidatesOnNotifyDataErrors=True}"/>
+                ValidatesOnNotifyDataErrors=True}"
+                     Margin="5,0,0,5"/>
+                </Grid>
 
-            <!-- Description -->
-            <TextBlock Text="Opis:"/>
-            <TextBox TextWrapping="Wrap" AcceptsReturn="True"
-                Text="{Binding Description, 
-                Mode=TwoWay, 
-                UpdateSourceTrigger=PropertyChanged,
-                ValidatesOnNotifyDataErrors=True}"/>
-            
-            <!-- Due Date -->
-            <TextBlock Text="Data wykonania zadania:"/>
-            <DatePicker SelectedDate="{Binding SelectedDueDate, Mode=TwoWay}"/>
+                <!-- Due Date -->
+            <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Text="Data wykonania zadania:"/>
+                <DatePicker Grid.Column="1"
+                            HorizontalContentAlignment="Right"
+                            SelectedDate="{Binding SelectedDueDate, Mode=TwoWay}"
+                            Margin="5,0,0,0"/>
+            </Grid>
             <!-- Due Time -->
-            <TextBlock Text="Czas wykonania zadania:"/>
-            <xctk:TimePicker Value="{Binding SelectedDueTime, Mode=TwoWay}"
-                             Format="Custom"
-                             FormatString="HH:mm"
-                             TimeInterval="00:05:00"
-                             ShowButtonSpinner="True"
-                             EndTime="23:59"/>
-
-            <!-- ========== Buttons ========== -->
-            <StackPanel Orientation="Horizontal">
+            <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
                 
+                <TextBlock Grid.Column="0"
+                           VerticalAlignment="Center"
+                           Text="Czas wykonania zadania:"/>
+                <xctk:TimePicker Grid.Column="1" 
+                                 TextAlignment="Center"
+                                 Value="{Binding SelectedDueTime, Mode=TwoWay}"
+                                 Margin="5,0,0,0"
+                                 Format="Custom"
+                                 FormatString="HH:mm"
+                                 TimeInterval="00:05:00"
+                                 ShowButtonSpinner="True"
+                                 EndTime="23:59"/>
+            </Grid>
+            <!-- ========== Buttons ========== -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
                 <!-- Add button -->
-                <Button Content="Dodaj zadanie!"
+                <Button Grid.Column="0" 
+                        Content="Dodaj zadanie!"
                         Command="{Binding AddTaskButton}"
                         Margin="0,0,5,0"/>
 
                 <!-- Cancel button -->
-                <Button Content="Anuluj"
+                <Button Grid.Column="1" Content="Anuluj"
                         Command="{Binding CancelAddingTaskButton}"/>
                 
-            </StackPanel>
+            </Grid>
         </StackPanel>
+
+        <Grid Grid.Column="1" Margin="10,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <!-- Description -->
+            <TextBlock Grid.Row="0" 
+                       Margin="0,0,0,5"
+                       Text="Opis:"/>
+            
+            <Border Grid.Row="1"  
+                BorderBrush="LightGray" 
+                BorderThickness="1" 
+                CornerRadius="4"
+                Padding="5"
+                Background="#FFF6F6F6">
+                <TextBox Text="{Binding Description, 
+                        Mode=TwoWay, 
+                        UpdateSourceTrigger=PropertyChanged,
+                        ValidatesOnNotifyDataErrors=True}"
+                        TextWrapping="Wrap"
+                        AcceptsReturn="True"
+                        VerticalScrollBarVisibility="Auto"
+                        BorderThickness="0"
+                        Background="Transparent"/>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>
