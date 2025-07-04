@@ -8,23 +8,25 @@
              d:DesignHeight="400" d:DesignWidth="200">
     <Grid>
         <StackPanel Margin="10" Orientation="Vertical">
-            
+            <TextBlock Text="To Do List" FontSize="30"/>
+
             <!-- Calendar -->
-            <Calendar SelectedDate="{Binding SelectedDate, Mode=TwoWay}" />
+            <Calendar SelectedDate="{Binding SelectedDate, Mode=TwoWay}"
+                      Margin="0,10,0,0"/>
 
             <!-- Add Button -->
             <Button Content="Dodaj"
-                    Margin="0,8,0,0"
+                    Margin="0,10,0,0"
                     Command="{Binding AddButton}" />
 
             <!-- Edit Button -->
             <Button Content="Edytuj"
-                    Margin="0,4,0,0"
+                    Margin="0,10,0,0"
                     Command="{Binding EditButton}" />
             
             <!-- Delete Button -->
             <Button Content="Usuń"
-                    Margin="0,4,0,0"
+                    Margin="0,10,0,0"
                     Command="{Binding DeleteButton}"/>
         </StackPanel>
     </Grid>

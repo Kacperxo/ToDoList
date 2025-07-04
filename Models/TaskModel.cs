@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace ToDoList.Models
 {
-    public class TaskModel : INotifyPropertyChanged
+    public class TaskModel : ObservableObject
     {
         #region variables
         public int Id { get; set; }
@@ -19,28 +19,27 @@ namespace ToDoList.Models
                 if (_isCompleted != value)
                 {
                     _isCompleted = value;
-                    OnProp();
+                    OnPropertyChanged();
                 }
             }
         }
         public DateTime UpdatedAt { get; set; }
         public DateTime CreatedAt { get; set; }
-        #endregion
-
-        #region INotifyPropertyChanged implementation
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnProp([CallerMemberName] string? n = null) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(n));
+        public virtual ICollection<ReminderModel> Reminders { get; set; }
         #endregion
 
         #region constructors
-        public TaskModel() { }
+        public TaskModel() 
+        {
+            Reminders = new HashSet<ReminderModel>();
+        }
         public TaskModel(string title, DateTime dueDate)
         {
             Title = title;
             Description = string.Empty;
             DueDate = dueDate;
             IsCompleted = false;
+            Reminders = new HashSet<ReminderModel>();
         }
         public TaskModel(string title, string description, DateTime dueDate)
         {
@@ -48,6 +47,7 @@ namespace ToDoList.Models
             Description = description;
             DueDate = dueDate;
             IsCompleted = false;
+            Reminders = new HashSet<ReminderModel>();
         }
         #endregion
 

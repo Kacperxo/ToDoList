@@ -11,6 +11,7 @@ namespace ToDoList.Data
     public class AppDbContext : DbContext
     {
         public DbSet<TaskModel> Tasks { get; set; } = null!;
+        public DbSet<ReminderModel> Reminders { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -19,6 +20,7 @@ namespace ToDoList.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            #region TaskModel Configuration
             modelBuilder.Entity<TaskModel>()
                 .ToTable("Tasks");
 
@@ -53,6 +55,30 @@ namespace ToDoList.Data
 
             modelBuilder.Entity<TaskModel>()
                 .HasIndex(t => t.DueDate);
+            #endregion
+
+            #region ReminderModel Configuration
+
+            modelBuilder.Entity<ReminderModel>()
+                .ToTable("Reminders");
+
+            modelBuilder.Entity<ReminderModel>()
+                .HasKey(r => r.Id);
+
+            modelBuilder.Entity<ReminderModel>()
+                .Property(r => r.Message)
+                .HasMaxLength(500);
+
+            modelBuilder.Entity<ReminderModel>()
+                .Property(r => r.ReminderDateTime)
+                .IsRequired();
+
+            modelBuilder.Entity<ReminderModel>()
+                .HasOne(r => r.Task)
+                .WithMany(t => t.Reminders)
+                .HasForeignKey(r => r.TaskId);
+
+            #endregion
         }
     }
 }
