@@ -7,7 +7,7 @@
         xmlns:vm="clr-namespace:ToDoList.ViewModels"
         xmlns:views="clr-namespace:ToDoList.Views"
         mc:Ignorable="d"
-        Title="ToDoList" Height="400" Width="800">
+        Title="ToDoList" Height="400" Width="800" ResizeMode="NoResize">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>

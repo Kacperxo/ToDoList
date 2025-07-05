@@ -6,42 +6,49 @@ using ToDoList.Commands;
 using ToDoList.Models;
 using ToDoList.Services;
 
-
 namespace ToDoList.ViewModels
 {
     public class AddTaskVM : BaseViewModel, INotifyDataErrorInfo
     {
         #region Validation (INotifyDataErrorInfo)
         #region Validation variables
+        // ====== Słownik do przechowywania błędów walidacji ======
         private readonly Dictionary<string, List<string>> _errors = new();
 
+        // ====== Flaga, czy formularz został dotknięty ======
+        // ======
         private bool _isTouched = false;
         public bool IsFormValid
         {
             get
             {
-                // Sprawdź wszystkie warunki walidacji bez dodawania błędów do UI
+                // ====== Sprawdzenie, czy formularz jest poprawny przed dodaniem bledow do UI ======
                 if (string.IsNullOrWhiteSpace(_Title)) return false;
                 if (_Title.Length > 100) return false;
                 if (Description.Length > 1000) return false;
                 return true; 
             }
         }
+        // ====== Sprawdzenie, czy formularz ma błędy ======
         public bool HasErrors => _errors.Any();
 
+        // ====== Zdarzenie do powiadamiania o zmianach błędów ======
         public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
         #endregion
 
+        // ====== Metoda do wywoływania zdarzenia ErrorsChanged ======
         private void OnErrorsChanged(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }
 
+        // ====== Metoda do sprawdzania błędów walidacji ======
         public IEnumerable GetErrors(string? propertyName)
         {
             return _errors.GetValueOrDefault(propertyName ?? "", new List<string>());
         }
 
+        // ====== Metoda do dodawania błędów walidacji ======
         private void AddError(string propertyName, string errorMessage)
         {
             if (!_isTouched) return;
@@ -56,6 +63,7 @@ namespace ToDoList.ViewModels
             }
         }
 
+        // ====== Metoda do usuwania błędów walidacji ======
         private void ClearErrors(string propertyName)
         {
             if (_errors.ContainsKey(propertyName))
@@ -65,7 +73,7 @@ namespace ToDoList.ViewModels
             }
         }
 
-        // Metoda do walidacji tytułu zadania
+        // ====== Metoda do walidacji tytułu zadania ======
         private void ValidateTitle()
         {
             ClearErrors(nameof(Title));
@@ -79,7 +87,7 @@ namespace ToDoList.ViewModels
             }
         }
 
-        // Metoda do walidacji opisu zadania
+        // ====== Metoda do walidacji opisu zadania ======
         private void ValidateDescription()
         {
             ClearErrors(nameof(Description));
@@ -100,8 +108,8 @@ namespace ToDoList.ViewModels
             {
                 _isTouched = true;
                 _Title = value;
-                OnProp();
-                OnProp(nameof(IsFormValid));
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsFormValid));
                 ValidateTitle();
             }
         }
@@ -114,8 +122,8 @@ namespace ToDoList.ViewModels
             set
             {
                 _Description = value;
-                OnProp();
-                OnProp(nameof(IsFormValid));
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsFormValid));
                 ValidateDescription();
             }
         }
@@ -128,7 +136,7 @@ namespace ToDoList.ViewModels
             set
             {
                 _SelectedDueDate = value;
-                OnProp();
+                OnPropertyChanged();
             }
         }
 
@@ -140,7 +148,7 @@ namespace ToDoList.ViewModels
             set
             {
                 _SelectedDueTime = value;
-                OnProp();
+                OnPropertyChanged();
             }
         }
         #endregion
@@ -175,6 +183,7 @@ namespace ToDoList.ViewModels
         private readonly TaskRepository _taskRepository;
         private readonly MainWindowVM _mainWindowVM;
 
+        // ====== Konstruktor ======
         public AddTaskVM(TaskRepository taskRepository, MainWindowVM mainWindowVM)
         {
             _taskRepository = taskRepository;

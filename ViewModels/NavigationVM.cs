@@ -1,32 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using ToDoList.Commands;
 
 namespace ToDoList.ViewModels
 {
     public class NavigationVM : BaseViewModel
     {
+        // ====== Ostatnio wybrana data ======
         private DateTime _selectedDate = DateTime.Today;
         public DateTime SelectedDate
         {
             get => _selectedDate;
             set
             {
+                // ====== Zdarzenie zmiany daty ======
                 _selectedDate = value;
-                OnProp();
-                _ = _root.OnDateChanged(value);
+                OnPropertyChanged();
+                _root.OnDateChanged(value);
             }
         }
 
         private readonly MainWindowVM _root;
+
+        // ====== Komendy do przycisków ======
         public ICommand AddButton { get; }
         public ICommand EditButton { get; }
         public ICommand DeleteButton { get; }
 
+        // ====== Konstruktor ======
         public NavigationVM(MainWindowVM root)
         {
             _root = root;

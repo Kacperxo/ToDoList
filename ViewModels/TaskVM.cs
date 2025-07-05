@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using ToDoList.Models;
 using ToDoList.Services;
@@ -14,18 +9,27 @@ namespace ToDoList.ViewModels
     public class TaskVM : BaseViewModel
     {
         private readonly TaskRepository _taskRepository;
+
+        // ====== Lista zadań reagująca na zmiany ======
         private readonly ObservableCollection<TaskModel> _tasks = new ObservableCollection<TaskModel>();
         public ICollectionView TasksView { get; }
 
+        // ====== Wybrana data ======
         private DateTime _selectedDate;
         public DateTime SelectedDate
         {
             get => _selectedDate;
-            set { _selectedDate = value; OnProp(); }
+            set 
+            { 
+                _selectedDate = value; 
+                OnPropertyChanged(); 
+            }
         }
 
+        // ====== Referencja do głównego okna ======
         public MainWindowVM? Root { get; set; }
 
+        // ====== Zadanie aktualnie zaznaczone ======
         private TaskModel? _selectedTask;
         public TaskModel? SelectedTask
         {
@@ -33,12 +37,13 @@ namespace ToDoList.ViewModels
             set
             {
                 _selectedTask = value;
-                OnProp();
+                OnPropertyChanged();
                 // Poinformuj MainWindowVM, że zaznaczenie się zmieniło
                 Root?.OnTaskSelectionChanged(value);
             }
         }
 
+        // ====== Konstruktor ======
         public TaskVM(TaskRepository taskRepository)
         {
             _taskRepository = taskRepository;
@@ -48,7 +53,8 @@ namespace ToDoList.ViewModels
             TasksView.SortDescriptions.Add(new SortDescription(nameof(TaskModel.DueDate), ListSortDirection.Ascending));
         }
 
-        // Publiczna metoda do ładowania/odświeżania zadań
+        #region Task List Interaction
+        // ====== Ładowanie zadań dla wybranej daty ======
         public async Task LoadTasksForDate(DateTime date)
         {
             SelectedDate = date;
@@ -65,9 +71,10 @@ namespace ToDoList.ViewModels
                 task.PropertyChanged += OnTaskPropertyChanged;
                 _tasks.Add(task);
             }
-            OnProp(nameof(TasksView));
+            OnPropertyChanged(nameof(TasksView));
         }
 
+        // ====== Obsługa zmiany właściwości IsCompleted ====== 
         private async void OnTaskPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(TaskModel.IsCompleted) && sender is TaskModel changedTask)
@@ -76,5 +83,6 @@ namespace ToDoList.ViewModels
                 TasksView.Refresh();
             }
         }
+        #endregion
     }
 }

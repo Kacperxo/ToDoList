@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ToDoList.Models;
 
 namespace ToDoList.Data
@@ -11,7 +6,6 @@ namespace ToDoList.Data
     public class AppDbContext : DbContext
     {
         public DbSet<TaskModel> Tasks { get; set; } = null!;
-        public DbSet<ReminderModel> Reminders { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -55,29 +49,6 @@ namespace ToDoList.Data
 
             modelBuilder.Entity<TaskModel>()
                 .HasIndex(t => t.DueDate);
-            #endregion
-
-            #region ReminderModel Configuration
-
-            modelBuilder.Entity<ReminderModel>()
-                .ToTable("Reminders");
-
-            modelBuilder.Entity<ReminderModel>()
-                .HasKey(r => r.Id);
-
-            modelBuilder.Entity<ReminderModel>()
-                .Property(r => r.Message)
-                .HasMaxLength(500);
-
-            modelBuilder.Entity<ReminderModel>()
-                .Property(r => r.ReminderDateTime)
-                .IsRequired();
-
-            modelBuilder.Entity<ReminderModel>()
-                .HasOne(r => r.Task)
-                .WithMany(t => t.Reminders)
-                .HasForeignKey(r => r.TaskId);
-
             #endregion
         }
     }

@@ -6,29 +6,34 @@ using ToDoList.Services;
 
 namespace ToDoList.ViewModels
 {
-    /// <summary>
-    /// Root-ViewModel aplikacji.  Zawiera nawigację i bieżącą stronę.
-    /// </summary>
     public class MainWindowVM : BaseViewModel
     {
-        // --- DI ------------------------------------------------------------
+        // ====== Wstrzykiwanie zależności ======
         private readonly IServiceProvider _provider;
+
+        // ====== CRUD do TaskModel ======
         private readonly TaskRepository _taskRepository;
 
-        // --- Bieżąca strona (ContentControl w MainWindow.xaml) -------------
+        // ====== Panel nawigacji ======
+        public NavigationVM Navigation { get; }
+
+        // ====== Zaznaczone zadanie ======
+        public TaskModel? SelectedTask { get; private set; }
+
+        // ====== Obiekt przechowujący aktualną stronę ======
         private object _currentPage = null!;
         public object CurrentPage
         {
             get => _currentPage;
-            set { _currentPage = value; OnProp(); }
+            set 
+            {
+                // ====== Zdarzenie zmiany strony ======
+                _currentPage = value; 
+                OnPropertyChanged(); 
+            }
         }
 
-        // --- Lewy panel z kalendarzem i przyciskami ------------------------
-        public NavigationVM Navigation { get; }
-
-        public TaskModel? SelectedTask { get; private set; }
-
-        // --- Konstruktor ---------------------------------------------------
+        // ====== Konstruktor głównego okna ======
         public MainWindowVM(IServiceProvider provider)
         {
             _provider = provider;
@@ -39,15 +44,30 @@ namespace ToDoList.ViewModels
             Navigation = new NavigationVM(this);
 
             // 2. ustaw ekran startowy: lista zadań
-            _ = NavigateTo<TaskVM>();
+            NavigateTo<TaskVM>();
         }
 
+        #region PropertyChanged Events
+        // ====== Zdarzenie zmiany zaznaczenia zadania ======
         public void OnTaskSelectionChanged(TaskModel? task)
         {
             SelectedTask = task;
             CommandManager.InvalidateRequerySuggested();
         }
 
+        // ====== Zdarzenie zmiany daty w kalendarzu ======
+        public async Task OnDateChanged(DateTime newDate)
+        {
+            if (CurrentPage is TaskVM taskVM)
+            {
+                await taskVM.LoadTasksForDate(newDate);
+            }
+        }
+        #endregion
+
+
+        #region NavigationVM Actions
+        // ====== Nawigacja do widoku edytowania zadania ======
         public void NavigateToEditView()
         {
             if (SelectedTask == null) return;
@@ -57,6 +77,7 @@ namespace ToDoList.ViewModels
             Navigate(editTaskVM);
         }
 
+        // ====== Usuwanie zaznaczonego zadania ======
         public async Task DeleteSelectedTaskAsync()
         {
             if (SelectedTask == null) return;
@@ -77,10 +98,14 @@ namespace ToDoList.ViewModels
                 await taskVM.LoadTasksForDate(Navigation.SelectedDate);
             }
         }
+        #endregion
 
-        // --- Metody nawigacji ---------------------------------------------
+        #region Navigation Methods
         /// <summary>
-        /// Przejdź na stronę typu <typeparamref name="T"/> pobieraną z DI.
+        /// Metoda służy do nawigacji, czyli zmiany aktualnie wyświetlanego widoku (strony).
+        /// Pobiera z kontenera wstrzykiwania zależności (DI) nową instancję ViewModelu określonego przez typ 'T' i ustawia ją jako bieżącą stronę (CurrentPage).
+        /// Parametr 'T' to typ ViewModelu, do którego ma nastąpić przejście (np. TaskVM, AddTaskVM).
+        /// Jeśli nową stroną jest widok listy zadań (TaskVM), metoda dodatkowo ładuje zadania dla aktualnie wybranej daty.
         /// </summary>
         public async Task NavigateTo<T>() where T : BaseViewModel
         {
@@ -93,17 +118,9 @@ namespace ToDoList.ViewModels
             }
         }
 
-        public async Task OnDateChanged(DateTime newDate)
-        {
-            if (CurrentPage is TaskVM taskVM)
-            {
-                await taskVM.LoadTasksForDate(newDate);
-            }
-        }
 
-        /// <summary>
-        /// Przejdź na już utworzony ViewModel (np. gdy potrzebujesz konstruktora z parametrem).
-        /// </summary>
+        // ====== Nawigacja do innego widoku ======
         public void Navigate(object vm) => CurrentPage = vm;
+        #endregion
     }
 }

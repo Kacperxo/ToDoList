@@ -17,30 +17,6 @@ namespace ToDoList.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.6");
 
-            modelBuilder.Entity("ToDoList.Models.ReminderModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("ReminderDateTime")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("TaskId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TaskId");
-
-                    b.ToTable("Reminders", (string)null);
-                });
-
             modelBuilder.Entity("ToDoList.Models.TaskModel", b =>
                 {
                     b.Property<int>("Id")
@@ -65,6 +41,9 @@ namespace ToDoList.Migrations
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(false);
 
+                    b.Property<bool>("IsNotificationSent")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -80,22 +59,6 @@ namespace ToDoList.Migrations
                     b.HasIndex("DueDate");
 
                     b.ToTable("Tasks", (string)null);
-                });
-
-            modelBuilder.Entity("ToDoList.Models.ReminderModel", b =>
-                {
-                    b.HasOne("ToDoList.Models.TaskModel", "Task")
-                        .WithMany("Reminders")
-                        .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Task");
-                });
-
-            modelBuilder.Entity("ToDoList.Models.TaskModel", b =>
-                {
-                    b.Navigation("Reminders");
                 });
 #pragma warning restore 612, 618
         }

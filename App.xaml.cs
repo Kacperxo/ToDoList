@@ -9,6 +9,8 @@ namespace ToDoList
 {
     public partial class App : Application
     {
+        private NotificationService? _notificationService;
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -21,6 +23,9 @@ namespace ToDoList
             services.AddTransient<EditTaskVM>();
             services.AddTransient<NavigationVM>();
 
+            services.AddSingleton<Notifier>();
+            services.AddSingleton<NotificationService>();
+
             services.AddSingleton<MainWindowVM>();
 
             IServiceProvider provider = services.BuildServiceProvider();
@@ -32,6 +37,9 @@ namespace ToDoList
             }
 
             var mainViewModel = provider.GetRequiredService<MainWindowVM>();
+
+            _notificationService = provider.GetRequiredService<NotificationService>();
+            _notificationService.Start();
 
             MainWindow = new MainWindow
             {

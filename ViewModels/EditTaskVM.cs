@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows;
 using ToDoList.Commands;
@@ -17,35 +12,42 @@ namespace ToDoList.ViewModels
     {
         #region Validation (INotifyDataErrorInfo)
         #region Validation variables
+        // ====== Słownik do przechowywania błędów walidacji ======
         private readonly Dictionary<string, List<string>> _errors = new();
 
+        // ====== Flaga, czy formularz został dotknięty ======
         private bool _isTouched = false;
         public bool IsFormValid
         {
             get
             {
-                // Sprawdź wszystkie warunki walidacji bez dodawania błędów do UI
+                // ====== Sprawdzenie, czy formularz jest poprawny przed dodaniem błędów do UI ======
                 if (string.IsNullOrWhiteSpace(_Title)) return false;
                 if (_Title.Length > 100) return false;
                 if (Description.Length > 1000) return false;
                 return true;
             }
         }
+        // ====== Sprawdzenie, czy formularz ma błędy ======
         public bool HasErrors => _errors.Any();
 
+        // ====== Zdarzenie do powiadamiania o zmianach błędów ======
         public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
         #endregion
 
+        // ====== Metoda do wywoływania zdarzenia ErrorsChanged ======
         private void OnErrorsChanged(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }
 
+        // ====== Metoda do sprawdzania błędów walidacji ======
         public IEnumerable GetErrors(string? propertyName)
         {
             return _errors.GetValueOrDefault(propertyName ?? "", new List<string>());
         }
 
+        // ====== Metoda do dodawania błędów walidacji ======
         private void AddError(string propertyName, string errorMessage)
         {
             if (!_isTouched) return;
@@ -60,6 +62,7 @@ namespace ToDoList.ViewModels
             }
         }
 
+        // ====== Metoda do usuwania błędów walidacji ======
         private void ClearErrors(string propertyName)
         {
             if (_errors.ContainsKey(propertyName))
@@ -69,7 +72,7 @@ namespace ToDoList.ViewModels
             }
         }
 
-        // Metoda do walidacji tytułu zadania
+        // ====== Metoda do walidacji tytułu zadania ======
         private void ValidateTitle()
         {
             ClearErrors(nameof(Title));
@@ -83,7 +86,7 @@ namespace ToDoList.ViewModels
             }
         }
 
-        // Metoda do walidacji opisu zadania
+        // ====== Metoda do walidacji opisu zadania ======
         private void ValidateDescription()
         {
             ClearErrors(nameof(Description));
@@ -95,7 +98,7 @@ namespace ToDoList.ViewModels
         #endregion
 
         #region view variables
-        // ===== Tytuł =====
+        // ====== Tytuł ======
         private string _Title = "";
         public string Title
         {
@@ -104,13 +107,13 @@ namespace ToDoList.ViewModels
             {
                 _isTouched = true;
                 _Title = value;
-                OnProp();
-                OnProp(nameof(IsFormValid));
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsFormValid));
                 ValidateTitle();
             }
         }
 
-        // ===== Opis =====
+        // ====== Opis ======
         private string _Description = "";
         public string Description
         {
@@ -118,8 +121,8 @@ namespace ToDoList.ViewModels
             set
             {
                 _Description = value;
-                OnProp();
-                OnProp(nameof(IsFormValid));
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsFormValid));
                 ValidateDescription();
             }
         }
@@ -132,7 +135,7 @@ namespace ToDoList.ViewModels
             set
             {
                 _SelectedDueDate = value;
-                OnProp();
+                OnPropertyChanged();
             }
         }
 
@@ -144,13 +147,13 @@ namespace ToDoList.ViewModels
             set
             {
                 _SelectedDueTime = value;
-                OnProp();
+                OnPropertyChanged();
             }
         }
         #endregion
 
         #region Methods
-        // ========== Add Task Button ==========
+        // ====== Save Task Button ======
         public ICommand SaveTaskButton { get; }
         private async Task SaveTask()
         {
@@ -169,7 +172,7 @@ namespace ToDoList.ViewModels
             await _mainWindowVM.NavigateTo<TaskVM>();
         }
 
-        // ========== Cancel Adding Task Button ==========
+        // ====== Cancel Saving Task Button ======
         public ICommand CancelSavingTaskButton { get; }
         private async void CancelSavingTask()
         {
@@ -180,8 +183,9 @@ namespace ToDoList.ViewModels
 
         private readonly TaskRepository _taskRepository;
         private readonly MainWindowVM _mainWindowVM;
-        private TaskModel _originalTask;    
+        private TaskModel _originalTask;
 
+        // ====== Konstruktor ======
         public EditTaskVM(TaskModel taskToEdit, TaskRepository taskRepository, MainWindowVM mainWindowVM)
         {
             _originalTask = taskToEdit;

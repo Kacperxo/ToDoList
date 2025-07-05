@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ToDoList.Data;
+﻿using ToDoList.Data;
 using ToDoList.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,6 +42,13 @@ namespace ToDoList.Services
 
         public async Task<TaskModel?> GetByIdAsync(int id) =>
             await _context.Tasks.FindAsync(id);
+
+        public async Task<IEnumerable<TaskModel>> GetUpcomingTasksAsync(DateTime from, DateTime to)
+        {
+            return await _context.Tasks
+                .Where(t => t.DueDate > from && t.DueDate <= to && !t.IsCompleted && !t.IsNotificationSent)
+                .ToListAsync();
+        }
 
         /* ----------  U  |  Update  ---------- */
         public async Task UpdateAsync(TaskModel task)
